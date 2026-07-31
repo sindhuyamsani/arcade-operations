@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sourcing & Ops Prototype for Arcade — Sindhu Yamsani</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f2ede1;
+    --surface: #ffffff;
+    --surface-2: #ece4d1;
+    --border: #e2d9c4;
+    --text-primary: #17140f;
+    --text-secondary: #6f6a5c;
+    --text-muted: #9a9483;
+    --ink: #17140f;
+    --yellow: #f4e409;
+    --yellow-text: #17140f;
+    --tan-bg: #ece0b8;
+    --tan-text: #4a4020;
+    --danger: #8c2f24;
+    --danger-bg: #f2ded7;
+    --radius: 16px;
+    --font-serif: "Fraunces", Georgia, serif;
+    --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: var(--font-sans);
+    background: var(--bg);
+    color: var(--text-primary);
+    line-height: 1.5;
+  }
+  .promo-strip {
+    background: var(--ink); color: var(--bg); text-align: center;
+    font-size: 12.5px; padding: 9px 12px; letter-spacing: 0.01em;
+  }
+  .top-nav {
+    display: flex; align-items: center; justify-content: space-between;
+    max-width: 960px; margin: 0 auto; padding: 1.25rem 1.5rem 0.5rem;
+  }
+  .logo {
+    font-family: var(--font-serif); font-weight: 600; font-size: 24px;
+    letter-spacing: -0.01em; color: var(--ink);
+  }
+  .nav-pill {
+    font-size: 12.5px; padding: 6px 14px; border-radius: 999px;
+    background: var(--surface); border: 1px solid var(--border); color: var(--text-secondary);
+  }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 1.5rem 1.5rem 5rem; }
+  header.page-header { margin-bottom: 2.25rem; }
+  header.page-header h1 {
+    font-family: var(--font-serif); font-weight: 500; font-size: 40px;
+    line-height: 1.08; margin: 0 0 10px; letter-spacing: -0.01em;
+  }
+  header.page-header p { font-size: 15px; color: var(--text-secondary); margin: 0; max-width: 560px; }
+  .badge-row { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+  .tag { font-size: 12px; padding: 5px 12px; border-radius: 999px; background: var(--ink); color: var(--bg); font-weight: 500; }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem 1.75rem;
+    margin-bottom: 1.5rem;
+  }
+  .card h2 {
+    font-family: var(--font-serif); font-weight: 500; font-size: 20px;
+    margin: 0 0 4px; display: flex; align-items: center; gap: 8px;
+  }
+  .card .card-sub { font-size: 13px; color: var(--text-secondary); margin: 0 0 16px; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; font-weight: 500; color: var(--text-secondary); padding: 6px 8px; border-bottom: 1px solid var(--border); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.03em; }
+  td { padding: 10px 8px; border-bottom: 1px solid var(--border); }
+  tr:last-child td { border-bottom: none; }
+
+  label { font-size: 12.5px; color: var(--text-secondary); display: block; margin-bottom: 4px; }
+  input[type=number], input[type=text], select, textarea {
+    width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: 10px;
+    font-size: 13px; font-family: inherit; background: var(--bg); color: var(--text-primary);
+  }
+  textarea { resize: vertical; min-height: 60px; }
+  input[type=range] { width: 100%; accent-color: var(--ink); }
+  .field { margin-bottom: 12px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  @media (max-width: 560px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+  .stat { background: var(--surface-2); border-radius: 12px; padding: 14px; }
+  .stat p.label { font-size: 11.5px; color: var(--text-secondary); margin: 0 0 4px; }
+  .stat p.value { font-family: var(--font-serif); font-size: 22px; font-weight: 500; margin: 0; }
+
+  .pill { font-size: 11.5px; padding: 4px 12px; border-radius: 999px; font-weight: 500; }
+  .pill-success { background: var(--yellow); color: var(--yellow-text); }
+  .pill-warning { background: var(--tan-bg); color: var(--tan-text); }
+  .pill-accent { background: var(--ink); color: var(--bg); }
+  .pill-neutral { background: var(--surface); color: var(--text-secondary); border: 1px solid var(--border); }
+
+  button {
+    background: var(--yellow); color: var(--yellow-text); border: none; border-radius: 999px;
+    padding: 10px 20px; font-size: 13px; font-weight: 600; cursor: pointer;
+    font-family: var(--font-sans);
+  }
+  button:hover { opacity: 0.88; }
+  button.secondary { background: var(--surface); color: var(--text-primary); border: 1px solid var(--border); }
+
+  .rfq-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .rfq-row:last-child { border-bottom: none; }
+  .rfq-row .name { font-size: 13.5px; }
+
+  .output-box {
+    background: var(--surface-2); border-radius: 12px; padding: 14px 16px; font-size: 13px;
+    white-space: pre-wrap; margin-top: 12px; border: 1px solid var(--border);
+  }
+  .output-box .tag-line { font-size: 12px; color: var(--text-secondary); margin-top: 8px; display: block; }
+
+  .qc-order { border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; background: var(--bg); }
+  .qc-order-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .qc-order-head .oname { font-family: var(--font-serif); font-size: 15px; font-weight: 500; }
+  .qc-item { display: flex; align-items: center; gap: 8px; font-size: 13px; padding: 4px 0; }
+  .qc-item input { width: auto; accent-color: var(--ink); }
+  .progress-bar { height: 6px; background: var(--surface-2); border-radius: 4px; overflow: hidden; margin-top: 10px; }
+  .progress-fill { height: 100%; background: var(--yellow); transition: width 0.2s ease; }
+
+  footer { text-align: center; font-size: 12px; color: var(--text-muted); margin-top: 2rem; }
+</style>
+</head>
+<body>
+<div class="promo-strip">Built for Arcade &nbsp;·&nbsp; Global Operations Intern prototype</div>
+<div class="top-nav">
+  <span class="logo">Arcade</span>
+  <span class="nav-pill">Sourcing Studio</span>
+</div>
+<div class="wrap">
+
+  <header class="page-header">
+    <h1>Sourcing & ops, prototyped</h1>
+    <p>A working demo of manufacturer research, pricing, content, and quality workflows for a custom tote bag line — built to show how I'd approach Arcade's Global Operations Intern role.</p>
+    <div class="badge-row">
+      <span class="tag">Supplier research</span>
+      <span class="tag">Pricing & margin</span>
+      <span class="tag">RFQ tracking</span>
+      <span class="tag">Content generation</span>
+      <span class="tag">Quality checks</span>
+    </div>
+  </header>
+
+  <div class="card">
+    <h2>Supplier comparison</h2>
+    <p class="card-sub">Illustrative supplier data based on 2026 Alibaba wholesale ranges for custom canvas totes.</p>
+    <table>
+      <thead>
+        <tr><th>Supplier</th><th>Region</th><th>Price/unit</th><th>MOQ</th><th>Lead time</th><th>Sample cost</th></tr>
+      </thead>
+      <tbody id="supTable"></tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Pricing & margin calculator</h2>
+    <p class="card-sub">Pick a supplier and see landed cost and margin recalculate live.</p>
+    <div class="field">
+      <label>Supplier</label>
+      <select id="supSelect"></select>
+    </div>
+    <div class="grid-2">
+      <div class="field">
+        <label>Unit cost ($)</label>
+        <input type="number" id="unitCost" step="0.1">
+      </div>
+      <div class="field">
+        <label>Retail price ($)</label>
+        <input type="number" id="retailPrice" value="28" step="0.5">
+      </div>
+      <div class="field">
+        <label>Freight and duty (<span id="freightOut">12</span>%)</label>
+        <input type="range" id="freight" min="0" max="30" value="12">
+      </div>
+      <div class="field">
+        <label>Platform and payment fees (<span id="feeOut">8</span>%)</label>
+        <input type="range" id="platformFee" min="0" max="20" value="8">
+      </div>
+    </div>
+    <div class="grid-3">
+      <div class="stat"><p class="label">Landed cost</p><p class="value" id="landedOut">--</p></div>
+      <div class="stat"><p class="label">Margin per unit</p><p class="value" id="marginOut">--</p></div>
+      <div class="stat"><p class="label">Margin percent</p><p class="value" id="marginPctOut">--</p></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>RFQ outreach tracker</h2>
+    <p class="card-sub">Click a status pill to advance the pipeline. Saved locally in your browser.</p>
+    <div id="rfqList"></div>
+  </div>
+
+  <div class="card">
+    <h2>Product content generator</h2>
+    <p class="card-sub">Rule-based prototype of an AI copy assistant — drafts site copy and a sales-channel caption from spec inputs. A production version would call an LLM API; this demonstrates the workflow and output shape.</p>
+    <div class="grid-2">
+      <div class="field">
+        <label>Product name</label>
+        <input type="text" id="prodName" value="Harbor canvas tote">
+      </div>
+      <div class="field">
+        <label>Material</label>
+        <input type="text" id="prodMaterial" value="12oz organic cotton canvas">
+      </div>
+      <div class="field">
+        <label>Key features (comma separated)</label>
+        <input type="text" id="prodFeatures" value="interior pocket, reinforced handles, custom embroidery">
+      </div>
+      <div class="field">
+        <label>Tone</label>
+        <select id="prodTone">
+          <option value="premium">Premium / elevated</option>
+          <option value="casual">Casual / friendly</option>
+          <option value="sustainable">Sustainability-forward</option>
+        </select>
+      </div>
+    </div>
+    <button id="genBtn">Generate copy</button>
+    <div class="output-box" id="genOutput" style="display:none;"></div>
+  </div>
+
+  <div class="card">
+    <h2>Order quality checklist</h2>
+    <p class="card-sub">Per-order QC pass before packing and shipping. Saved locally in your browser.</p>
+    <div id="qcList"></div>
+  </div>
+
+  <footer>Prototype by Sindhu Yamsani for Arcade's Global Operations Intern application. Data is illustrative.</footer>
+</div>
+
+<script>
+const suppliers = [
+  {name:"Guangzhou Canvas Co.", region:"China", price:2.10, moq:"500", lead:"25 days", sample:18},
+  {name:"Ningbo Ecobag Ltd.", region:"China", price:1.65, moq:"1000", lead:"30 days", sample:15},
+  {name:"Anhui Cotton Works", region:"China", price:3.40, moq:"300", lead:"20 days", sample:22},
+  {name:"Jaipur Textile Traders", region:"India", price:2.85, moq:"250", lead:"18 days", sample:20},
+  {name:"Istanbul Weave House", region:"Turkey", price:4.20, moq:"150", lead:"14 days", sample:25}
+];
+
+const supTable = document.getElementById("supTable");
+suppliers.forEach(s => {
+  const tr = document.createElement("tr");
+  tr.innerHTML = `<td>${s.name}</td><td>${s.region}</td><td>$${s.price.toFixed(2)}</td><td>${s.moq}</td><td>${s.lead}</td><td>$${s.sample}</td>`;
+  supTable.appendChild(tr);
+});
+
+const supSelect = document.getElementById("supSelect");
+suppliers.forEach((s,i) => {
+  const opt = document.createElement("option");
+  opt.value = i;
+  opt.textContent = `${s.name} ($${s.price.toFixed(2)}/unit)`;
+  supSelect.appendChild(opt);
+});
+
+const unitCost = document.getElementById("unitCost");
+const retailPrice = document.getElementById("retailPrice");
+const freight = document.getElementById("freight");
+const platformFee = document.getElementById("platformFee");
+const freightOut = document.getElementById("freightOut");
+const feeOut = document.getElementById("feeOut");
+const landedOut = document.getElementById("landedOut");
+const marginOut = document.getElementById("marginOut");
+const marginPctOut = document.getElementById("marginPctOut");
+
+function recalc(){
+  const cost = parseFloat(unitCost.value) || 0;
+  const retail = parseFloat(retailPrice.value) || 0;
+  const fr = parseFloat(freight.value);
+  const fee = parseFloat(platformFee.value);
+  freightOut.textContent = fr;
+  feeOut.textContent = fee;
+  const landed = cost * (1 + fr/100);
+  const feeAmount = retail * (fee/100);
+  const margin = retail - landed - feeAmount;
+  const marginPct = retail > 0 ? (margin/retail)*100 : 0;
+  landedOut.textContent = "$" + landed.toFixed(2);
+  marginOut.textContent = "$" + margin.toFixed(2);
+  marginOut.style.color = margin >= 0 ? "var(--success)" : "var(--danger)";
+  marginPctOut.textContent = marginPct.toFixed(0) + "%";
+  marginPctOut.style.color = margin >= 0 ? "var(--success)" : "var(--danger)";
+}
+function applySupplier(){
+  const s = suppliers[supSelect.value];
+  unitCost.value = s.price;
+  recalc();
+}
+supSelect.addEventListener("change", applySupplier);
+[unitCost, retailPrice, freight, platformFee].forEach(el => el.addEventListener("input", recalc));
+applySupplier();
+
+const rfqOrder = ["Outreach sent", "Sample requested", "Quote received", "Negotiating", "Onboarded"];
+const rfqPillClass = {
+  "Outreach sent": "pill-neutral",
+  "Sample requested": "pill-warning",
+  "Quote received": "pill-success",
+  "Negotiating": "pill-accent",
+  "Onboarded": "pill-success"
+};
+let rfqData = JSON.parse(localStorage.getItem("rfqData") || "null") || [
+  {name:"Guangzhou Canvas Co.", status:"Quote received"},
+  {name:"Ningbo Ecobag Ltd.", status:"Sample requested"},
+  {name:"Anhui Cotton Works", status:"Outreach sent"},
+  {name:"Jaipur Textile Traders", status:"Negotiating"},
+  {name:"Istanbul Weave House", status:"Outreach sent"}
+];
+function saveRfq(){ localStorage.setItem("rfqData", JSON.stringify(rfqData)); }
+function renderRfq(){
+  const rfqList = document.getElementById("rfqList");
+  rfqList.innerHTML = "";
+  rfqData.forEach((r, idx) => {
+    const row = document.createElement("div");
+    row.className = "rfq-row";
+    const pillCls = rfqPillClass[r.status] || "pill-neutral";
+    row.innerHTML = `<span class="name">${r.name}</span><span class="pill ${pillCls}" style="cursor:pointer;" data-idx="${idx}">${r.status}</span>`;
+    rfqList.appendChild(row);
+  });
+  rfqList.querySelectorAll("[data-idx]").forEach(el => {
+    el.addEventListener("click", () => {
+      const idx = el.getAttribute("data-idx");
+      const cur = rfqOrder.indexOf(rfqData[idx].status);
+      rfqData[idx].status = rfqOrder[(cur + 1) % rfqOrder.length];
+      saveRfq();
+      renderRfq();
+    });
+  });
+}
+renderRfq();
+
+const toneWords = {
+  premium: { open: "Elevated everyday carry.", verb: "crafted", extra: "Made for those who notice the details." },
+  casual: { open: "Your new go-to bag.", verb: "made", extra: "Easy to love, easy to carry." },
+  sustainable: { open: "Carry less impact, every day.", verb: "responsibly made", extra: "Designed with the planet in mind." }
+};
+document.getElementById("genBtn").addEventListener("click", () => {
+  const name = document.getElementById("prodName").value || "This product";
+  const material = document.getElementById("prodMaterial").value || "premium materials";
+  const features = document.getElementById("prodFeatures").value.split(",").map(f => f.trim()).filter(Boolean);
+  const tone = toneWords[document.getElementById("prodTone").value];
+  const featureText = features.length ? features.join(", ") : "thoughtful everyday details";
+  const productCopy = `${tone.open}\n\nThe ${name} is ${tone.verb} from ${material}, built for daily use without compromise. Featuring ${featureText}, it's designed to hold up to real life while looking effortless. ${tone.extra}`;
+  const caption = `Meet the ${name} — ${material}, ${features[0] || "designed to last"}. Shop now. #CustomMade #${name.replace(/\s+/g,'')}`;
+  const out = document.getElementById("genOutput");
+  out.style.display = "block";
+  out.textContent = "PRODUCT PAGE COPY\n" + productCopy + "\n\nSALES CHANNEL CAPTION\n" + caption;
+});
+
+const qcItems = ["Visual inspection", "Stitching and seam check", "Print / embroidery match", "Packaging check"];
+let qcOrders = JSON.parse(localStorage.getItem("qcOrders") || "null") || [
+  { id: "ORD-1042", checks: [true, true, false, false] },
+  { id: "ORD-1043", checks: [true, false, false, false] },
+  { id: "ORD-1044", checks: [false, false, false, false] }
+];
+function saveQc(){ localStorage.setItem("qcOrders", JSON.stringify(qcOrders)); }
+function qcStatus(checks){
+  const done = checks.filter(Boolean).length;
+  if (done === 0) return {label:"Pending", cls:"pill-neutral"};
+  if (done === checks.length) return {label:"Passed — ready to ship", cls:"pill-success"};
+  return {label:"In review", cls:"pill-warning"};
+}
+function renderQc(){
+  const qcList = document.getElementById("qcList");
+  qcList.innerHTML = "";
+  qcOrders.forEach((order, oi) => {
+    const status = qcStatus(order.checks);
+    const pct = Math.round((order.checks.filter(Boolean).length / order.checks.length) * 100);
+    const div = document.createElement("div");
+    div.className = "qc-order";
+    let itemsHtml = "";
+    qcItems.forEach((item, ii) => {
+      itemsHtml += `<label class="qc-item"><input type="checkbox" data-o="${oi}" data-i="${ii}" ${order.checks[ii] ? "checked" : ""}> ${item}</label>`;
+    });
+    div.innerHTML = `<div class="qc-order-head"><span class="oname">${order.id}</span><span class="pill ${status.cls}">${status.label}</span></div>${itemsHtml}<div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>`;
+    qcList.appendChild(div);
+  });
+  qcList.querySelectorAll("input[type=checkbox]").forEach(cb => {
+    cb.addEventListener("change", () => {
+      const oi = cb.getAttribute("data-o");
+      const ii = cb.getAttribute("data-i");
+      qcOrders[oi].checks[ii] = cb.checked;
+      saveQc();
+      renderQc();
+    });
+  });
+}
+renderQc();
+</script>
+</body>
+</html>
